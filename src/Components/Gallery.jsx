@@ -2,20 +2,29 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import spinner from '../resources/spinner.gif';
+import Spinner from 'react-bootstrap/Spinner';
 
 
 
 function Gallery() {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
+  const [isDataPresent, setIsDataPresent] = useState(false)
 
   const url='http://localhost:3001/home';
   useEffect(() => {
-    axios.get(url)
-  .then(res => {
-    // console.log(res.data);
-    setData(res.data);
-  })
-  .catch((error) =>{console.log(error);})
+
+    
+      axios.get(url)
+      .then(res => {
+        // console.log(res.data);
+        setIsDataPresent(true)
+        setData(res.data);
+      })
+      .catch((error) =>{console.log(error);})
+  
+    
+   
   }, [])
   console.log(data);
   // const fetchInfo = async () => { 
@@ -33,6 +42,10 @@ function Gallery() {
   return (
     
     <div>
+ {!isDataPresent? <div><img className='loadin'src={spinner} alt="loading" srcset="" /></div>: 
+ <div>
+     
+
          <div class="intro">
             <h2 class="text-center">Lightbox Gallery</h2>
             <p class="text-center">Find the lightbox gallery for your project. click on any image to open gallary</p>
@@ -78,6 +91,7 @@ function Gallery() {
         </div>
     </div>
 </div>
+</div>}
 </div>
   )
 }
