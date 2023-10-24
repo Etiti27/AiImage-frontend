@@ -2,30 +2,39 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import {url} from './property'
 import Alert from 'react-bootstrap/Alert';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
     // document.body.style.overflow = "hidden"
     const navigate = useNavigate();
     
-    const [email, setEmail] = useState('');
+    const [names, setNames] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isSuccess,setIsSuccess] = useState(false)
+	const [userExists, setUserExists] = useState(false);
     const Registration=(e)=>{
         e.preventDefault();
         // const url='http://localhost:3001/register'
 axios.post(`${url}/register`,{
-    email: email,
+    names: names,
     password: password,
     username: username
 }).then((response)=>{
-    setIsSuccess(true)
-    setTimeout(() => {
-        setIsSuccess(false);
-        navigate('/login')
-    }, 5000);
-   console.log(response);
+	if(response.data!=='you\'re  successfully registered'){
+setUserExists(false)
+setIsSuccess(true);
+setNames('');
+setPassword('');
+setUsername('');
+	}else{
+		setUserExists(true)
+		setTimeout(() => {
+			setIsSuccess(false);
+			navigate('/login')
+		}, 5000);
+	}
+	
 })
     }
   return (
@@ -37,12 +46,12 @@ axios.post(`${url}/register`,{
             <h2>REGISTER</h2>
 				<div className="login__field">
 					<i className="login__icon fas fa-user"></i>
-					<input type="text" className="login__input" value={username} onChange={(e)=>{setUsername(e.target.value)}} placeholder="Username" name='username'/>
+					<input type="text" className="login__input" value={names} onChange={(e)=>{setNames(e.target.value)}} placeholder="Name" name='names'/>
 				</div>
 
                 <div className="login__field">
 					<i className="login__icon fas fa-user"></i>
-					<input type="email" className="login__input" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}} name='email'/>
+					<input type="email" className="login__input" placeholder="Email" value={username} onChange={(e)=>{setUsername(e.target.value)}} name='email'/>
 				</div>
 				<div className="login__field">
 					<i className="login__icon fas fa-lock"></i>
@@ -56,6 +65,11 @@ axios.post(`${url}/register`,{
             {isSuccess?
         <Alert key='success' variant='success'>
           You're successfully registered!
+        </Alert>:null
+}
+{userExists?
+        <Alert key='success' variant='success'>
+          The email address already exist!, <div><Link to='/reset'>Reset Password</Link></div>
         </Alert>:null
 }
 			{/* <div className="social-login">

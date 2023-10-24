@@ -16,21 +16,22 @@ export default function Login() {
 			username,
 			password
 		}).then((response)=>{
-console.log(response);
-if(response.data==='not user found'){
+console.log(response.data);
+if(response.data==='authenticated'){
+	navigate('/upload',{state:response.data});
 	setUserNotFound(true);
 	setPasswordNotCorrect(false)
 	
 }
-else if(response.data===false){
-setPasswordNotCorrect(true);
-setUserNotFound(false);
-}else if(response.data===true){
-	setPasswordNotCorrect(false);
-setUserNotFound(false);
-	navigate('/upload')
-}
-		})
+
+
+		}).catch((error)=>{
+			if(error.response.status===401){
+				setPasswordNotCorrect(true)
+			}
+			
+			console.log(error.response.status);
+		});
 	}
   return (
     <div className="container">
@@ -38,10 +39,11 @@ setUserNotFound(false);
 		<div className="screen__content">
 		<h2>LOGIN</h2>
 			<form className="login" onSubmit={SignIn}>
-				<h2>Please Login</h2>
+				
+				<h2>Please Login </h2>
 				<div className="login__field">
 					<i className="login__icon fas fa-user"></i>
-					<input type="text" className="login__input" value={username} onChange={(e)=>{setUsername(e.target.value)}} placeholder="User name / Email" name='email'/>
+					<input type="email" className="login__input" value={username} onChange={(e)=>{setUsername(e.target.value)}} placeholder="Email" name='username'/>
 				</div>
 				<div className="login__field">
 					<i className="login__icon fas fa-lock"></i>
@@ -54,13 +56,13 @@ setUserNotFound(false);
 			</form>
 			{userNotFound?
         <Alert key='success' variant='success'>
-          Username or email address not found! please register now
-		  <div><Link to='/register'>Register</Link></div>
+          Username or email address not found! 
+		  {/* <div><Link to='/register'>Register</Link></div> */}
         </Alert>:null
 }
 {passwordNotCorrect?
         <Alert key='success' variant='success'>
-         password is entered not correct!, please try again or reset your password
+         Username or password entered not correct!, please try again or reset your password
 		  <div><Link to='/resetpassword'>Password Reset</Link></div>
         </Alert>:null
 }

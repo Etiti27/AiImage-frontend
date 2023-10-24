@@ -1,2 +1,3 @@
-export const url="http://localhost:3001";
-
+export const url="https://server2.natreltherapy.shop";
+// 
+// http://localhost:3001

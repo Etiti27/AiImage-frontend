@@ -1,25 +1,45 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import { url } from './property';
-
+import axios from 'axios';
+import { Link, useLocation} from 'react-router-dom';
 // import image from '../photo/natrel.png';
 
 function UploadFile() {
+	const [files, setFiles]=useState('');
+	const [title, setTitle]=useState('');
+	const location=useLocation()
+	
+	
+
+		
+		const data=location.state;
+
+		
+			
+		
+		
+		
+	  
+	 
+	
+
+
+
   return (
     <div>
        
-
-
+<div>{data==='authenticated'? 
 <div className="container">
 	<div className="screen">
 		<div className="screen__content">
-			<form className="login"  enctype="multipart/form-data" method="post" action={`${url}/upload`}>
+			<form className="login"  encType="multipart/form-data" method="post" action={`${url}/upload`}>
 				<div className="">
 					<i className="login__icon fas fa-user"></i>
-					<input type="file" className="form-control-file"  name='uploaded_file'/>
+					<input type="file" className="form-control-file"   required name='uploaded_file'/>
 				</div>
 				<div className="login__field">
 					<i className="login__icon fas fa-lock"></i>
-					<input type="text" className="login__input" name='title' placeholder="Title" />
+					<input type="text" className="login__input" name='title' required placeholder="Title" />
 				</div>
 				<button className="button login__submit">
 					<span className="button__text">Upload now</span>
@@ -52,6 +72,10 @@ function UploadFile() {
 		</div>		
 	</div>
 </div>
+: <div>
+	you're not allowed to upload unless you login as administrator
+	 <Link to="/login">Login</Link>
+	</div>}</div>
     </div>
   )
 }

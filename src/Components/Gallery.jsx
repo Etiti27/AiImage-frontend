@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import spinner from '../resources/spinner.gif';
 import Spinner from 'react-bootstrap/Spinner';
+import { url } from './property';
 
 
 
@@ -11,11 +12,11 @@ function Gallery() {
   const [data, setData] = useState([]);
   const [isDataPresent, setIsDataPresent] = useState(false)
 
-  const url='http://localhost:3001/home';
+  
   useEffect(() => {
 
     
-      axios.get(url)
+      axios.get(`${url}/home`)
       .then(res => {
         // console.log(res.data);
         setIsDataPresent(true)
@@ -47,8 +48,8 @@ function Gallery() {
      
 
          <div class="intro">
-            <h2 class="text-center">Lightbox Gallery</h2>
-            <p class="text-center">Find the lightbox gallery for your project. click on any image to open gallary</p>
+            <h2 class="text-center">Natural Hair AI Images</h2>
+            <p class="text-center">Find the AI Image gallery for our Natural Hair. click on any image to open gallary</p>
         </div>
     
 <div class="lightbox-gallery">
