@@ -32,7 +32,7 @@ function Header() {
 <nav className="navbar bg-body-tertiary">
   <div className="container-fluid">
     {/* <a href='' class="navbar-brand">Navbar</a> */}
-    <img src={Logo2} alt="logo"  className="d-inline-block logo align-text-top" id='logo'/>
+    <img src={Logo} alt="logo"  className="d-inline-block logo align-text-top" id='logo'/>
     <form className="d-flex" role="search" onSubmit={submit}>
       <input className="form-control me-2" name='search'onChange={(e)=>setInput(e.target.value)} type="search" placeholder="Search" aria-label="Search"/>
       <button className="btn btn-outline-success"  type="submit">Search</button>

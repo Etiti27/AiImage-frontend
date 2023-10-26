@@ -14,7 +14,8 @@
 }
 @media only screen and (max-width: 400px) {
   #logo {
-    width: 30px;
+    width: 70px;
+	height: auto;
     
   }
 }
@@ -42,8 +43,8 @@
   }
 }
 .logo{
-  height: 70px;
-  width: 10rem;
+  height: auto;
+  width: 100px;
   
 }
 

@@ -9,15 +9,61 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForeverOutlined';
 // import image from '../photo/natrel.png';
 
 function UploadFile() {
-	const [files, setFiles]=useState('');
-	const [title, setTitle]=useState('');
-	const [deleteItemId, setDeleteItem]=useState('');
+	
+	const [isDataPresent, setIsDataPresent] = useState(false)
+	const [datta, setDatta] = useState('');
+    const [images, setImages] = useState([]);
+	const [title, setTitle] = useState('');
+	const [isUpload, setIsUpload] = useState(false);
+	const [dataInDatabase, setDataInDatabase] = useState(false);
+
 	const navigate = useNavigate();
 	const location=useLocation();
 	const data=location.state;
 
-	const [datas, setDatas] = useState([]);
-  const [isDataPresent, setIsDataPresent] = useState(false)
+  const testChange=(e) => {
+    const reader= new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload= () => {
+    // console.log(reader.result);
+    setDatta(reader.result);
+    }
+    
+  }
+const SubmitMe=(e) => {
+	e.preventDefault();
+	
+    axios.post(`${url}/uploadimage`, {datta, title})
+    .then((res)=>{
+		console.log(res.data.result);
+		if(res.data.result === 'found'){
+			setIsUpload(false);
+			setDataInDatabase(true);
+		// 	setTimeout(() => {
+		// 		setIsUpload(false);
+		// 		window.location.reload();
+		// 	}, 3000);
+		}else{
+			setIsUpload(true);
+			setDataInDatabase(false);
+			setTimeout(() => {
+				setIsUpload(false);
+				setDataInDatabase(false);
+				window.location.reload();
+			}, 2000);
+		}
+		
+	})
+	.catch(err => {console.log(err);})
+};
+
+useEffect(() => {
+ axios.get(`${url}/uploadimage`).then((res)=>{
+    setIsDataPresent(true);
+    setImages(res.data.data);
+ });
+  
+}, [])
 
   
 const Submitt=(e)=>{
@@ -27,41 +73,33 @@ const Submitt=(e)=>{
 	axios.post(`${url}/delete`,{id})
 	.then(()=>{
 		window.location.reload();
-	})
-
+	}).catch((err)=>{console.log(err);})
 }
   
-  useEffect(() => {
-
-    
-      axios.get(`${url}/home`)
-      .then(res => {
-        // console.log(res.data);
-        setIsDataPresent(true)
-        setDatas(res.data);
-      })
-      .catch((error) =>{console.log(error);})
-  
-    
-   
-  }, [])
-
+// console.log(images[0]._id);
   return (
     <div>
        
 <div>{data==='authenticated'? 
 <div>
+	
 <div className="container">
+
 	<div className="screen">
+	
 		<div className="screen__content">
-			<form className="login"  encType="multipart/form-data" method="post" action={`${url}/upload`}>
+		<form className="login" onSubmit={SubmitMe}>
+		{isUpload? <div  style={{color: "red", fontSize:'20px'}}>Upload Successful!!</div>: null}
+		{dataInDatabase? <div  style={{color: "red", fontSize:'20px'}}>Oop!!! Image file or title already exist, upload a new image or change the name</div>: null}
+		<br />
 				<div className="">
 					<i className="login__icon fas fa-user"></i>
-					<input type="file" className="form-control-file"   required name='uploaded_file'/>
+					<input type="file" className="form-control-file" onChange={testChange}  required name='uploaded_file'/>
+					{/* <input type="file" className="form-control-file"   required name='uploaded_file'/> */}
 				</div>
 				<div className="login__field">
 					<i className="login__icon fas fa-lock"></i>
-					<input type="text" className="login__input" name='title' required placeholder="Title" />
+					<input type="text" className="login__input" name='title' value={title} onChange={(e)=>{setTitle(e.target.value)}} required placeholder="Title" />
 				</div>
 				<button className="button login__submit">
 					<span className="button__text">Upload now</span>
@@ -96,21 +134,21 @@ const Submitt=(e)=>{
        
         <div class="row photos">
 
-        {datas.map(data => {
+        {images.map(image => {
           return <div class="col-sm-6 col-md-4 col-lg-3 item">
-            <h3 className='title'>{data.fileName}</h3>
+            <h3 className='title'>{image.fileName}</h3>
 
-               <a href={require(`../photo/${data.filefile}`)} data-lightbox="photos">
-                <img class="img-fluid gallery-image" src={require(`../photo/${data.filefile}`)} alt='pic'/></a>
+               <a href={image.file} data-lightbox="photos">
+                <img class="img-fluid gallery-image" src={image.file} alt='pic'/></a>
 				<form onSubmit={Submitt}>
-					<input type="hidden" name='id' value={data._id} />
+					<input type="hidden" name='id' value={image._id} />
 					<button type="submit"> <DeleteForeverIcon /></button>
 				{/* <div className='delete' onClick={()=>{setDeleteItem(data._id)}}> <DeleteForeverIcon /></div> */}
 				
 				</form>
 					
 					
-                <p className='uploadTime'>uploaded: {data.uploadTime.slice(0, 10)}</p>
+                <p className='uploadTime'>uploaded: {image.uploadTime.slice(0, 10)}</p>
                 </div>
                 
 

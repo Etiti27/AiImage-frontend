@@ -8,6 +8,7 @@ import FoundSearch from './Components/FoundSearch';
 import Register from './Components/Register';
 import ResetPassword from './Components/ResetPassword';
 import ResetFromEmail from './Components/ResetFromEmail';
+import UploadTest from './Components/UploadTest';
 
 
 function App() {
@@ -22,12 +23,13 @@ function App() {
           {/* <Route path="contact" element={<Contact />} /> */}
           {/* <Route path="*" element={<NoPage />} /> */}
         </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="upload" element={<UploadFile/>} />
-        <Route path="found_search" element={<FoundSearch/>} />
-        <Route path="register" element={<Register/>} />
-        <Route path='reset' element={<ResetPassword/>} />
-        <Route path='reset/:userid' element={<ResetFromEmail/>} />
+        <Route  path="login" element={<Login />} />
+        <Route  path="upload" element={<UploadFile/>} />
+        <Route  path="found_search" element={<FoundSearch/>} />
+        <Route  path="register" element={<Register/>} />
+        <Route  path='reset' element={<ResetPassword/>} />
+        <Route  path='reset/:userid' element={<ResetFromEmail/>} />
+        <Route  path='testupload' element={<UploadTest/>} />
       </Routes>
     </BrowserRouter>
       
